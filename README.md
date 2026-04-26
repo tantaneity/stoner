@@ -1,0 +1,2 @@
+# stoner
+type shi
