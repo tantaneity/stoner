@@ -47,7 +47,7 @@ export default function SetStreakDateModal({
             className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50"
             onKeyDown={handleKeyDown}
           >
-            <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-4 shadow-2xl">
+            <div className="stone border border-border rounded-2xl p-6 flex flex-col gap-4 shadow-2xl">
               <h2 className="text-primary font-semibold text-base">{t.chooseStartDate}</h2>
               <input
                 type="date"

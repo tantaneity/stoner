@@ -3,60 +3,72 @@
 @tailwind utilities;
 
 :root {
-  --c-bg: #0d0d12;
-  --c-surface: #15151e;
-  --c-border: #21212e;
-  --c-accent: #7c6bfa;
-  --c-accent-dim: #6a59e8;
-  --c-clean: #1c183a;
-  --c-clean-text: #a78bfa;
-  --c-relapse: #251e14;
-  --c-relapse-text: #e09a60;
-  --c-primary: #e8e8f2;
-  --c-muted: #60607e;
-  --c-subtle: #35354a;
+  --c-bg: #16140f;
+  --c-surface: #201e18;
+  --c-border: #302e26;
+  --c-accent: #9d8ef5;
+  --c-accent-dim: #8a7be2;
+  --c-clean: #222a1a;
+  --c-clean-text: #a0b070;
+  --c-relapse: #281e12;
+  --c-relapse-text: #c08858;
+  --c-primary: #e2ddd6;
+  --c-muted: #767060;
+  --c-subtle: #464038;
 
-  --chart-grid: #21212e;
-  --chart-axis: #60607e;
-  --chart-tooltip-bg: #15151e;
-  --chart-tooltip-border: #21212e;
-  --chart-tooltip-text: #e8e8f2;
+  --chart-grid: #302e26;
+  --chart-axis: #767060;
+  --chart-tooltip-bg: #201e18;
+  --chart-tooltip-border: #302e26;
+  --chart-tooltip-text: #e2ddd6;
 }
 
 [data-theme="dim"] {
-  --c-bg: #10101a;
-  --c-surface: #18182a;
-  --c-border: #24243a;
-  --c-primary: #d8d8f0;
-  --c-muted: #6868a0;
-  --c-subtle: #38385c;
+  --c-bg: #120f0c;
+  --c-surface: #1a1814;
+  --c-border: #272420;
+  --c-primary: #d8d3cc;
+  --c-muted: #6e6860;
+  --c-subtle: #3c3830;
 
-  --chart-grid: #24243a;
-  --chart-axis: #6868a0;
-  --chart-tooltip-bg: #18182a;
-  --chart-tooltip-border: #24243a;
-  --chart-tooltip-text: #d8d8f0;
+  --chart-grid: #272420;
+  --chart-axis: #6e6860;
+  --chart-tooltip-bg: #1a1814;
+  --chart-tooltip-border: #272420;
+  --chart-tooltip-text: #d8d3cc;
 }
 
 [data-theme="light"] {
-  --c-bg: #f4f4fa;
-  --c-surface: #ffffff;
-  --c-border: #e2e2f0;
+  --c-bg: #edeae0;
+  --c-surface: #f6f3ea;
+  --c-border: #d8d4c8;
   --c-accent: #6b5af7;
   --c-accent-dim: #5b4ae7;
-  --c-clean: #eeebff;
-  --c-clean-text: #5b4ad0;
-  --c-relapse: #fff4ea;
-  --c-relapse-text: #c07030;
-  --c-primary: #0f0f1a;
-  --c-muted: #8888aa;
-  --c-subtle: #d4d4e8;
+  --c-clean: #e4ead8;
+  --c-clean-text: #5a7040;
+  --c-relapse: #f0e8d8;
+  --c-relapse-text: #9a6040;
+  --c-primary: #1a1814;
+  --c-muted: #8a8478;
+  --c-subtle: #ccc8bc;
 
-  --chart-grid: #e2e2f0;
-  --chart-axis: #8888aa;
-  --chart-tooltip-bg: #ffffff;
-  --chart-tooltip-border: #e2e2f0;
-  --chart-tooltip-text: #0f0f1a;
+  --chart-grid: #d8d4c8;
+  --chart-axis: #8a8478;
+  --chart-tooltip-bg: #f6f3ea;
+  --chart-tooltip-border: #d8d4c8;
+  --chart-tooltip-text: #1a1814;
+}
+
+@layer components {
+  .stone {
+    background-color: var(--c-surface);
+    background-image:
+      radial-gradient(ellipse at 28% 22%, rgba(255, 255, 255, 0.06) 0%, transparent 56%),
+      radial-gradient(ellipse at 74% 76%, rgba(0, 0, 0, 0.1) 0%, transparent 44%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 100% 100%, 100% 100%, 180px 180px;
+    background-blend-mode: normal, normal, overlay;
+  }
 }
 
 * {

@@ -113,19 +113,19 @@ export default function StatsView({ habit, onBack }: StatsViewProps) {
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-surface border border-border rounded-2xl p-4">
+        <div className="stone border border-border rounded-2xl p-4">
           <div className="text-2xl font-bold text-primary tabular-nums">
             {habit.currentStreak}
           </div>
           <div className="text-xs text-muted mt-1">{t.currentStreak}</div>
         </div>
-        <div className="bg-surface border border-border rounded-2xl p-4">
+        <div className="stone border border-border rounded-2xl p-4">
           <div className="text-2xl font-bold text-primary tabular-nums">
             {habit.bestStreak}
           </div>
           <div className="text-xs text-muted mt-1">{t.bestStreak}</div>
         </div>
-        <div className="bg-surface border border-border rounded-2xl p-4">
+        <div className="stone border border-border rounded-2xl p-4">
           <div className="text-2xl font-bold text-relapse-text tabular-nums">
             {habit.totalRelapses}
           </div>
@@ -133,7 +133,7 @@ export default function StatsView({ habit, onBack }: StatsViewProps) {
         </div>
       </div>
 
-      <div className="bg-surface border border-border rounded-2xl p-5">
+      <div className="stone border border-border rounded-2xl p-5">
         {data.length === 0 ? (
           <div className="h-48 flex items-center justify-center text-muted text-sm">
             {t.noHistory}

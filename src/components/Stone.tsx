@@ -38,19 +38,19 @@ export default function Stone() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <ellipse cx="45" cy="68" rx="38" ry="9" fill="#000000" opacity="0.25" />
+        <ellipse cx="45" cy="68" rx="38" ry="8" fill="#0a0806" opacity="0.3" />
 
-        <ellipse cx="45" cy="46" rx="40" ry="28" fill="#2D3748" />
-        <ellipse cx="45" cy="44" rx="38" ry="26" fill="#4A5568" />
-        <ellipse cx="45" cy="43" rx="36" ry="25" fill="#525f74" />
+        <ellipse cx="45" cy="46" rx="40" ry="28" fill="#3a3530" />
+        <ellipse cx="45" cy="44" rx="38" ry="26" fill="#524c46" />
+        <ellipse cx="45" cy="43" rx="36" ry="25" fill="#5e5850" />
 
         <ellipse
           cx="31"
           cy="31"
           rx="11"
           ry="6"
-          fill="#718096"
-          opacity="0.35"
+          fill="#9a9088"
+          opacity="0.28"
           transform="rotate(-20 31 31)"
         />
 
@@ -60,8 +60,8 @@ export default function Stone() {
           animate={isBlinking ? "blink" : "open"}
           transition={eyeTransition}
         >
-          <ellipse cx="32" cy="44" rx="5.5" ry="5.5" fill="#1A202C" />
-          <circle cx="34" cy="42" r="1.8" fill="white" opacity="0.9" />
+          <ellipse cx="32" cy="44" rx="5.5" ry="5.5" fill="#181410" />
+          <circle cx="34" cy="42" r="1.8" fill="white" opacity="0.85" />
         </motion.g>
 
         <motion.g
@@ -70,8 +70,8 @@ export default function Stone() {
           animate={isBlinking ? "blink" : "open"}
           transition={eyeTransition}
         >
-          <ellipse cx="58" cy="44" rx="5.5" ry="5.5" fill="#1A202C" />
-          <circle cx="60" cy="42" r="1.8" fill="white" opacity="0.9" />
+          <ellipse cx="58" cy="44" rx="5.5" ry="5.5" fill="#181410" />
+          <circle cx="60" cy="42" r="1.8" fill="white" opacity="0.85" />
         </motion.g>
       </svg>
     </div>

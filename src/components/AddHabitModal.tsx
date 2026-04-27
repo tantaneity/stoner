@@ -54,7 +54,7 @@ export default function AddHabitModal({ isOpen, onAdd, onClose }: AddHabitModalP
             <form
               onSubmit={handleSubmit}
               onKeyDown={handleKeyDown}
-              className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-4 shadow-2xl"
+              className="stone border border-border rounded-2xl p-6 flex flex-col gap-4 shadow-2xl"
             >
               <h2 className="text-primary font-semibold text-base">{t.addHabit}</h2>
               <input

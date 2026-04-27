@@ -44,8 +44,8 @@ export default function SettingsView() {
               onClick={() => setTheme(opt.value)}
               className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
                 theme === opt.value
-                  ? "border-accent bg-surface"
-                  : "border-border bg-surface hover:border-subtle"
+                  ? "border-accent stone"
+                  : "border-border stone hover:border-subtle"
               }`}
             >
               <div
@@ -85,8 +85,8 @@ export default function SettingsView() {
               onClick={() => setLang(code)}
               className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
                 lang === code
-                  ? "border-accent bg-surface"
-                  : "border-border bg-surface hover:border-subtle"
+                  ? "border-accent stone"
+                  : "border-border stone hover:border-subtle"
               }`}
             >
               <span className="text-xs font-bold text-muted w-6 shrink-0">{code.toUpperCase()}</span>
