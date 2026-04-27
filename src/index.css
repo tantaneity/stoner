@@ -3,60 +3,60 @@
 @tailwind utilities;
 
 :root {
-  --c-bg: #0a0a0a;
-  --c-surface: #141414;
-  --c-border: #222222;
-  --c-accent: #6366f1;
-  --c-accent-dim: #4f46e5;
-  --c-clean: #14532d;
-  --c-clean-text: #86efac;
-  --c-relapse: #7f1d1d;
-  --c-relapse-text: #fca5a5;
-  --c-primary: #f5f5f5;
-  --c-muted: #6b7280;
-  --c-subtle: #374151;
+  --c-bg: #0d0d12;
+  --c-surface: #15151e;
+  --c-border: #21212e;
+  --c-accent: #7c6bfa;
+  --c-accent-dim: #6a59e8;
+  --c-clean: #1c183a;
+  --c-clean-text: #a78bfa;
+  --c-relapse: #251e14;
+  --c-relapse-text: #e09a60;
+  --c-primary: #e8e8f2;
+  --c-muted: #60607e;
+  --c-subtle: #35354a;
 
-  --chart-grid: #222222;
-  --chart-axis: #6b7280;
-  --chart-tooltip-bg: #141414;
-  --chart-tooltip-border: #222222;
-  --chart-tooltip-text: #f5f5f5;
+  --chart-grid: #21212e;
+  --chart-axis: #60607e;
+  --chart-tooltip-bg: #15151e;
+  --chart-tooltip-border: #21212e;
+  --chart-tooltip-text: #e8e8f2;
 }
 
 [data-theme="dim"] {
-  --c-bg: #111827;
-  --c-surface: #1f2937;
-  --c-border: #374151;
-  --c-primary: #f3f4f6;
-  --c-muted: #9ca3af;
-  --c-subtle: #6b7280;
+  --c-bg: #10101a;
+  --c-surface: #18182a;
+  --c-border: #24243a;
+  --c-primary: #d8d8f0;
+  --c-muted: #6868a0;
+  --c-subtle: #38385c;
 
-  --chart-grid: #374151;
-  --chart-axis: #9ca3af;
-  --chart-tooltip-bg: #1f2937;
-  --chart-tooltip-border: #374151;
-  --chart-tooltip-text: #f3f4f6;
+  --chart-grid: #24243a;
+  --chart-axis: #6868a0;
+  --chart-tooltip-bg: #18182a;
+  --chart-tooltip-border: #24243a;
+  --chart-tooltip-text: #d8d8f0;
 }
 
 [data-theme="light"] {
-  --c-bg: #f8fafc;
+  --c-bg: #f4f4fa;
   --c-surface: #ffffff;
-  --c-border: #e2e8f0;
-  --c-accent: #4f46e5;
-  --c-accent-dim: #4338ca;
-  --c-clean: #dcfce7;
-  --c-clean-text: #166534;
-  --c-relapse: #fee2e2;
-  --c-relapse-text: #991b1b;
-  --c-primary: #0f172a;
-  --c-muted: #94a3b8;
-  --c-subtle: #cbd5e1;
+  --c-border: #e2e2f0;
+  --c-accent: #6b5af7;
+  --c-accent-dim: #5b4ae7;
+  --c-clean: #eeebff;
+  --c-clean-text: #5b4ad0;
+  --c-relapse: #fff4ea;
+  --c-relapse-text: #c07030;
+  --c-primary: #0f0f1a;
+  --c-muted: #8888aa;
+  --c-subtle: #d4d4e8;
 
-  --chart-grid: #e2e8f0;
-  --chart-axis: #94a3b8;
+  --chart-grid: #e2e2f0;
+  --chart-axis: #8888aa;
   --chart-tooltip-bg: #ffffff;
-  --chart-tooltip-border: #e2e8f0;
-  --chart-tooltip-text: #0f172a;
+  --chart-tooltip-border: #e2e2f0;
+  --chart-tooltip-text: #0f0f1a;
 }
 
 * {

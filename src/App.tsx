@@ -61,6 +61,7 @@ export default function App() {
       bestStreak: 0,
       totalRelapses: 0,
       lastRelapseAt: null,
+      streakStartDate: null,
       history: [],
     };
     setHabits((prev) => [newHabit, ...prev]);
@@ -92,12 +93,33 @@ export default function App() {
         return {
           ...h,
           currentStreak: 0,
+          streakStartDate: null,
           totalRelapses: h.totalRelapses + 1,
           lastRelapseAt: new Date().toISOString(),
           history: [
             ...h.history,
             { timestamp: new Date().toISOString(), type: "relapse" as const },
           ],
+        };
+      })
+    );
+  }, []);
+
+  const handleSetStreakDate = useCallback((id: string, date: string | null) => {
+    setHabits((prev) =>
+      prev.map((h) => {
+        if (h.id !== id) return h;
+        if (date === null) return { ...h, streakStartDate: null };
+        const start = new Date(date);
+        start.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const newStreak = Math.max(0, Math.floor((today.getTime() - start.getTime()) / 86400000) + 1);
+        return {
+          ...h,
+          streakStartDate: date,
+          currentStreak: newStreak,
+          bestStreak: Math.max(h.bestStreak, newStreak),
         };
       })
     );
@@ -215,6 +237,7 @@ export default function App() {
                         onRelapse={handleRelapse}
                         onDelete={handleDelete}
                         onStats={setSelectedHabitId}
+                        onSetStreakDate={handleSetStreakDate}
                       />
                     ))}
                   </AnimatePresence>

@@ -14,6 +14,7 @@ export interface Habit {
   bestStreak: number;
   totalRelapses: number;
   lastRelapseAt: string | null;
+  streakStartDate: string | null;
   history: HistoryEntry[];
 }
 

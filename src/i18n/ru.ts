@@ -22,6 +22,11 @@ const ru: Translations = {
   themeDark: "Тёмная",
   themeDim: "Приглушённая",
   themeLight: "Светлая",
+  loggedToday: "Записано сегодня",
+  setStreakStart: "Установить дату начала",
+  streakSince: "с",
+  clearDate: "сбросить",
+  chooseStartDate: "Когда начал?",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;

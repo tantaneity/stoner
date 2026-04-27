@@ -20,6 +20,11 @@ const en = {
   themeDark: "Dark",
   themeDim: "Dim",
   themeLight: "Light",
+  loggedToday: "Logged today",
+  setStreakStart: "Set start date",
+  streakSince: "since",
+  clearDate: "clear",
+  chooseStartDate: "When did you start?",
   day: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
 };
 
