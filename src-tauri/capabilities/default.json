@@ -10,8 +10,7 @@
     "dialog:default",
     "fs:default",
     "fs:allow-write-text-file",
-    "fs:allow-download-dir",
     "fs:scope-download-recursive",
-    "fs:scope-app-data-recursive"
+    "fs:scope-appdata-recursive"
   ]
 }
