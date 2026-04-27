@@ -16,6 +16,12 @@ const uk: Translations = {
   back: "Назад",
   deleteHabit: "Видалити звичку",
   noHistory: "Даних ще немає",
+  settings: "Налаштування",
+  language: "Мова",
+  theme: "Тема",
+  themeDark: "Темна",
+  themeDim: "Приглушена",
+  themeLight: "Світла",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;

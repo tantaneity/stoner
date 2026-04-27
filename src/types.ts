@@ -1,4 +1,5 @@
 export type Language = "en" | "uk" | "ru";
+export type Theme = "dark" | "dim" | "light";
 
 export interface HistoryEntry {
   timestamp: string;
@@ -19,6 +20,7 @@ export interface Habit {
 export interface AppData {
   habits: Habit[];
   language: Language;
+  theme: Theme;
 }
 
 export interface ChartPoint {

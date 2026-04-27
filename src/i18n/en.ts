@@ -14,6 +14,12 @@ const en = {
   back: "Back",
   deleteHabit: "Delete habit",
   noHistory: "No data yet",
+  settings: "Settings",
+  language: "Language",
+  theme: "Theme",
+  themeDark: "Dark",
+  themeDim: "Dim",
+  themeLight: "Light",
   day: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
 };
 

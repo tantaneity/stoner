@@ -1,37 +1,56 @@
 import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import type { Habit, AppData, Language } from "./types";
+import type { Habit, AppData, Language, Theme } from "./types";
 import { LangContext, translations } from "./i18n";
 import { loadData, saveData } from "./storage";
 import Stone from "./components/Stone";
 import HabitCard from "./components/HabitCard";
 import AddHabitModal from "./components/AddHabitModal";
 import StatsView from "./components/StatsView";
-import LanguageSwitcher from "./components/LanguageSwitcher";
+import SettingsView from "./components/SettingsView";
+
+type Tab = "habits" | "settings";
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
+function applyTheme(theme: Theme): void {
+  document.documentElement.setAttribute("data-theme", theme);
+}
+
 export default function App() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [language, setLanguage] = useState<Language>("en");
+  const [theme, setThemeState] = useState<Theme>("dark");
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAddingHabit, setIsAddingHabit] = useState(false);
   const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>("habits");
 
   useEffect(() => {
     loadData().then((data: AppData) => {
       setHabits(data.habits);
       setLanguage(data.language);
+      setThemeState(data.theme);
+      applyTheme(data.theme);
       setIsLoaded(true);
     });
   }, []);
 
   useEffect(() => {
     if (!isLoaded) return;
-    saveData({ habits, language });
-  }, [habits, language, isLoaded]);
+    saveData({ habits, language, theme });
+  }, [habits, language, theme, isLoaded]);
+
+  const handleSetTheme = useCallback((t: Theme) => {
+    setThemeState(t);
+    applyTheme(t);
+  }, []);
+
+  const handleSetLang = useCallback((lang: Language) => {
+    setLanguage(lang);
+  }, []);
 
   const handleAddHabit = useCallback((name: string) => {
     const newHabit: Habit = {
@@ -84,14 +103,13 @@ export default function App() {
     );
   }, []);
 
-  const handleDelete = useCallback((id: string) => {
-    setHabits((prev) => prev.filter((h) => h.id !== id));
-    if (selectedHabitId === id) setSelectedHabitId(null);
-  }, [selectedHabitId]);
-
-  const handleSetLang = useCallback((lang: Language) => {
-    setLanguage(lang);
-  }, []);
+  const handleDelete = useCallback(
+    (id: string) => {
+      setHabits((prev) => prev.filter((h) => h.id !== id));
+      if (selectedHabitId === id) setSelectedHabitId(null);
+    },
+    [selectedHabitId]
+  );
 
   const selectedHabit = habits.find((h) => h.id === selectedHabitId) ?? null;
   const t = translations[language];
@@ -101,12 +119,67 @@ export default function App() {
   }
 
   return (
-    <LangContext.Provider value={{ lang: language, t, setLang: handleSetLang }}>
+    <LangContext.Provider
+      value={{ lang: language, t, setLang: handleSetLang, theme, setTheme: handleSetTheme }}
+    >
       <div className="min-h-full bg-bg">
         <div className="max-w-xl mx-auto px-5 py-6">
           <header className="flex items-center justify-between mb-8">
-            <h1 className="text-primary font-semibold text-xl tracking-tight">stoner</h1>
-            <LanguageSwitcher />
+            <button
+              onClick={() => {
+                setActiveTab("habits");
+                setSelectedHabitId(null);
+              }}
+              className="text-primary font-semibold text-xl tracking-tight hover:opacity-70 transition-opacity"
+            >
+              stoner
+            </button>
+
+            <div className="flex items-center gap-1 bg-surface border border-border rounded-xl p-1">
+              <button
+                onClick={() => {
+                  setActiveTab("habits");
+                  setSelectedHabitId(null);
+                }}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  activeTab === "habits" && !selectedHabitId
+                    ? "text-primary bg-border"
+                    : "text-muted hover:text-primary"
+                }`}
+                title="Habits"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="2" y="3" width="12" height="1.5" rx="0.75" fill="currentColor" />
+                  <rect x="2" y="7.25" width="12" height="1.5" rx="0.75" fill="currentColor" />
+                  <rect x="2" y="11.5" width="8" height="1.5" rx="0.75" fill="currentColor" />
+                </svg>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab("settings");
+                  setSelectedHabitId(null);
+                }}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  activeTab === "settings"
+                    ? "text-primary bg-border"
+                    : "text-muted hover:text-primary"
+                }`}
+                title={t.settings}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 10a2 2 0 100-4 2 2 0 000 4z"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+                  <path
+                    d="M13.3 8c0-.23-.02-.46-.05-.68l1.47-1.14a.35.35 0 00.08-.45l-1.4-2.42a.35.35 0 00-.43-.15l-1.73.7a5.07 5.07 0 00-1.17-.68L9.8 1.97A.35.35 0 009.46 1.67H6.54a.35.35 0 00-.35.3L5.93 3.18a5.07 5.07 0 00-1.17.68l-1.73-.7a.35.35 0 00-.43.15L1.2 5.73a.35.35 0 00.08.45l1.47 1.14A5.18 5.18 0 002.7 8c0 .23.02.46.05.68L1.28 9.82a.35.35 0 00-.08.45l1.4 2.42c.09.16.28.22.43.15l1.73-.7c.37.27.76.49 1.17.68l.26 1.21c.05.23.26.4.5.4h2.92c.24 0 .45-.17.5-.4l.26-1.21a5.07 5.07 0 001.17-.68l1.73.7c.15.07.34.01.43-.15l1.4-2.42a.35.35 0 00-.08-.45L13.25 8.68A5.18 5.18 0 0013.3 8z"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+                </svg>
+              </button>
+            </div>
           </header>
 
           <AnimatePresence mode="wait">
@@ -116,6 +189,8 @@ export default function App() {
                 habit={selectedHabit}
                 onBack={() => setSelectedHabitId(null)}
               />
+            ) : activeTab === "settings" ? (
+              <SettingsView key="settings" />
             ) : (
               <motion.div
                 key="home"
@@ -150,7 +225,12 @@ export default function App() {
                   className="mt-2 w-full py-3 rounded-2xl border border-border text-muted text-sm hover:text-primary hover:border-subtle transition-colors flex items-center justify-center gap-2"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <path
+                      d="M7 1v12M1 7h12"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   {t.addHabit}
                 </button>

@@ -12,12 +12,14 @@ export async function loadData(): Promise<AppData> {
     const store = await getStore();
     const habits = await store.get<AppData["habits"]>("habits");
     const language = await store.get<AppData["language"]>("language");
+    const theme = await store.get<AppData["theme"]>("theme");
     return {
       habits: habits ?? [],
       language: language ?? "en",
+      theme: theme ?? "dark",
     };
   } catch {
-    return { habits: [], language: "en" };
+    return { habits: [], language: "en", theme: "dark" };
   }
 }
 
@@ -26,6 +28,7 @@ export async function saveData(data: AppData): Promise<void> {
     const store = await getStore();
     await store.set("habits", data.habits);
     await store.set("language", data.language);
+    await store.set("theme", data.theme);
   } catch {
   }
 }

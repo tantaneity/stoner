@@ -13,13 +13,14 @@
     "windows": [
       {
         "title": "Stoner",
-        "width": 1000,
+        "width": 460,
         "height": 700,
-        "minWidth": 600,
+        "minWidth": 380,
         "minHeight": 500,
         "resizable": true,
         "fullscreen": false,
-        "decorations": true
+        "decorations": true,
+        "center": true
       }
     ],
     "security": {
