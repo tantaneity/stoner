@@ -1,13 +1,14 @@
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { Reorder, useDragControls, motion } from "framer-motion";
 import type { Habit } from "../types";
 import { useLang } from "../i18n";
 import SetStreakDateModal from "./SetStreakDateModal";
+import RelapseNoteModal from "./RelapseNoteModal";
 
 interface HabitCardProps {
   habit: Habit;
   onCleanDay: (id: string) => void;
-  onRelapse: (id: string) => void;
+  onRelapse: (id: string, note?: string) => void;
   onDelete: (id: string) => void;
   onStats: (id: string) => void;
   onSetStreakDate: (id: string, date: string | null) => void;
@@ -38,7 +39,9 @@ export default function HabitCard({
   onSetStreakDate,
 }: HabitCardProps) {
   const { t } = useLang();
+  const controls = useDragControls();
   const [showDateModal, setShowDateModal] = useState(false);
+  const [showNoteModal, setShowNoteModal] = useState(false);
 
   const todayStr = new Date().toISOString().split("T")[0];
 
@@ -56,15 +59,33 @@ export default function HabitCard({
 
   return (
     <>
-      <motion.div
+      <Reorder.Item
+        value={habit}
+        dragListener={false}
+        dragControls={controls}
         layout
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -16 }}
         transition={{ duration: 0.2 }}
         className="stone border border-border rounded-2xl p-5 flex flex-col gap-4"
+        style={{ listStyle: "none" }}
       >
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-2">
+          <motion.div
+            onPointerDown={(e) => controls.start(e)}
+            className="text-muted/30 hover:text-muted/70 cursor-grab active:cursor-grabbing transition-colors shrink-0 touch-none pt-0.5"
+          >
+            <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor">
+              <circle cx="2" cy="2" r="1.5" />
+              <circle cx="8" cy="2" r="1.5" />
+              <circle cx="2" cy="7" r="1.5" />
+              <circle cx="8" cy="7" r="1.5" />
+              <circle cx="2" cy="12" r="1.5" />
+              <circle cx="8" cy="12" r="1.5" />
+            </svg>
+          </motion.div>
+
           <h2 className="text-primary font-medium text-sm leading-snug flex-1">
             {habit.name}
           </h2>
@@ -143,7 +164,7 @@ export default function HabitCard({
             <>
               <div className="flex-1" />
               <button
-                onClick={() => onRelapse(habit.id)}
+                onClick={() => setShowNoteModal(true)}
                 className="flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-all active:scale-95"
                 style={{ background: "var(--c-relapse)", color: "var(--c-relapse-text)" }}
               >
@@ -167,7 +188,7 @@ export default function HabitCard({
                 {t.cleanDay}
               </button>
               <button
-                onClick={() => onRelapse(habit.id)}
+                onClick={() => setShowNoteModal(true)}
                 className="flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-all active:scale-95"
                 style={{ background: "var(--c-relapse)", color: "var(--c-relapse-text)" }}
               >
@@ -176,7 +197,7 @@ export default function HabitCard({
             </>
           )}
         </div>
-      </motion.div>
+      </Reorder.Item>
 
       <SetStreakDateModal
         isOpen={showDateModal}
@@ -186,6 +207,15 @@ export default function HabitCard({
           setShowDateModal(false);
         }}
         onClose={() => setShowDateModal(false)}
+      />
+
+      <RelapseNoteModal
+        isOpen={showNoteModal}
+        onConfirm={(note) => {
+          onRelapse(habit.id, note);
+          setShowNoteModal(false);
+        }}
+        onClose={() => setShowNoteModal(false)}
       />
     </>
   );

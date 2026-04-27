@@ -27,6 +27,11 @@ const uk: Translations = {
   streakSince: "з",
   clearDate: "скинути",
   chooseStartDate: "Коли ти почав?",
+  relapseNoteTitle: "Зафіксувати зрив",
+  relapseNotePlaceholder: "Що трапилось? (необов'язково)",
+  skip: "Пропустити",
+  activity: "Активність",
+  relapseNotes: "Нотатки",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;

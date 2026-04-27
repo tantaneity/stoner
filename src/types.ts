@@ -4,6 +4,7 @@ export type Theme = "dark" | "dim" | "light";
 export interface HistoryEntry {
   timestamp: string;
   type: "clean" | "relapse";
+  note?: string;
 }
 
 export interface Habit {

@@ -25,6 +25,11 @@ const en = {
   streakSince: "since",
   clearDate: "clear",
   chooseStartDate: "When did you start?",
+  relapseNoteTitle: "Log relapse",
+  relapseNotePlaceholder: "What happened? (optional)",
+  skip: "Skip",
+  activity: "Activity",
+  relapseNotes: "Notes",
   day: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
 };
 

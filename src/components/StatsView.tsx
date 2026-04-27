@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { motion } from "framer-motion";
-import type { Habit, ChartPoint } from "../types";
+import type { Habit, ChartPoint, HistoryEntry } from "../types";
 import { useLang } from "../i18n";
 
 interface StatsViewProps {
@@ -80,10 +80,86 @@ function CustomDot({ cx, cy, payload }: CustomDotProps) {
   );
 }
 
+function HeatmapCalendar({ history }: { history: HistoryEntry[] }) {
+  const WEEKS = 26;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const dateMap = useMemo(() => {
+    const map = new Map<string, "clean" | "relapse">();
+    for (const entry of history) {
+      const d = entry.timestamp.split("T")[0];
+      if (!map.has(d) || entry.type === "relapse") map.set(d, entry.type);
+    }
+    return map;
+  }, [history]);
+
+  const weeks = useMemo(() => {
+    const start = new Date(today);
+    start.setDate(today.getDate() - (WEEKS * 7 - 1));
+    const dayOfWeek = (start.getDay() + 6) % 7;
+    start.setDate(start.getDate() - dayOfWeek);
+
+    const result: Array<Array<{ date: Date; type: string }>> = [];
+    const cur = new Date(start);
+
+    while (result.length < WEEKS + 1) {
+      const week: Array<{ date: Date; type: string }> = [];
+      for (let d = 0; d < 7; d++) {
+        const dateStr = cur.toISOString().split("T")[0];
+        const isFuture = cur > today;
+        const type = isFuture ? "future" : (dateMap.get(dateStr) ?? "empty");
+        week.push({ date: new Date(cur), type });
+        cur.setDate(cur.getDate() + 1);
+      }
+      result.push(week);
+      if (cur > today) break;
+    }
+
+    return result;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateMap]);
+
+  return (
+    <div className="flex gap-[3px] overflow-x-auto pb-1">
+      {weeks.map((week, wi) => (
+        <div key={wi} className="flex flex-col gap-[3px]">
+          {week.map((day, di) => (
+            <div
+              key={di}
+              className="w-[9px] h-[9px] rounded-[2px] shrink-0"
+              style={{
+                background:
+                  day.type === "clean"
+                    ? "var(--c-accent)"
+                    : day.type === "relapse"
+                    ? "var(--c-relapse-text)"
+                    : day.type === "future"
+                    ? "transparent"
+                    : "var(--c-border)",
+                opacity: day.type === "future" ? 0 : day.type === "empty" ? 0.5 : 1,
+              }}
+              title={day.date.toLocaleDateString()}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function StatsView({ habit, onBack }: StatsViewProps) {
   const { t } = useLang();
   const data = useMemo(() => buildChartData(habit), [habit]);
   const colors = useChartColors();
+
+  const relapseNotes = useMemo(
+    () =>
+      habit.history
+        .filter((e) => e.type === "relapse" && e.note)
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
+    [habit.history]
+  );
 
   return (
     <motion.div
@@ -131,6 +207,13 @@ export default function StatsView({ habit, onBack }: StatsViewProps) {
           </div>
           <div className="text-xs text-muted mt-1">{t.totalRelapses}</div>
         </div>
+      </div>
+
+      <div className="stone border border-border rounded-2xl p-5 flex flex-col gap-3">
+        <h2 className="text-xs font-semibold text-muted uppercase tracking-widest">
+          {t.activity}
+        </h2>
+        <HeatmapCalendar history={habit.history} />
       </div>
 
       <div className="stone border border-border rounded-2xl p-5">
@@ -189,6 +272,28 @@ export default function StatsView({ habit, onBack }: StatsViewProps) {
           </ResponsiveContainer>
         )}
       </div>
+
+      {relapseNotes.length > 0 && (
+        <div className="stone border border-border rounded-2xl p-5 flex flex-col gap-3">
+          <h2 className="text-xs font-semibold text-muted uppercase tracking-widest">
+            {t.relapseNotes}
+          </h2>
+          <div className="flex flex-col gap-2">
+            {relapseNotes.map((entry, i) => (
+              <div key={i} className="flex flex-col gap-0.5">
+                <span className="text-xs text-muted">
+                  {new Date(entry.timestamp).toLocaleDateString(undefined, {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+                <span className="text-sm text-primary">{entry.note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }

@@ -27,6 +27,11 @@ const ru: Translations = {
   streakSince: "с",
   clearDate: "сбросить",
   chooseStartDate: "Когда начал?",
+  relapseNoteTitle: "Зафиксировать срыв",
+  relapseNotePlaceholder: "Что произошло? (необязательно)",
+  skip: "Пропустить",
+  activity: "Активность",
+  relapseNotes: "Заметки",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
