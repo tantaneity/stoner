@@ -80,6 +80,28 @@ export default function App() {
     saveData({ habits, language, theme });
   }, [habits, language, theme, isLoaded]);
 
+  // Scheduled reminder: check every minute
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (localStorage.getItem("notifyUnlogged") !== "true") return;
+      const reminderTime = localStorage.getItem("reminderTime") ?? "09:00";
+      const now = new Date();
+      const [rh, rm] = reminderTime.split(":").map(Number);
+      if (now.getHours() !== rh || now.getMinutes() !== rm) return;
+      const todayStr = now.toISOString().split("T")[0];
+      if (localStorage.getItem("lastNotifiedDate") === todayStr) return;
+      const granted = await isPermissionGranted();
+      if (!granted) return;
+      const hasUnlogged = habits.some(
+        (h) => !h.history.some((e) => e.timestamp.startsWith(todayStr))
+      );
+      if (!hasUnlogged) return;
+      localStorage.setItem("lastNotifiedDate", todayStr);
+      sendNotification({ title: "Stoner", body: t.notifyBody });
+    }, 60_000);
+    return () => clearInterval(interval);
+  }, [habits, t]);
+
   // Auto-lock on window focus
   useEffect(() => {
     const handleFocus = () => {

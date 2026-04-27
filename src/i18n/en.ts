@@ -37,6 +37,7 @@ const en = {
   notifications: "Notifications",
   notifyUnlogged: "Remind if not logged today",
   notifyBody: "Time to check in.",
+  reminderTime: "Reminder time",
   addImage: "Add image",
   changeImage: "Change",
   privacy: "Privacy",

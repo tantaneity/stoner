@@ -39,6 +39,7 @@ const uk: Translations = {
   notifications: "Сповіщення",
   notifyUnlogged: "Нагадати якщо не записано сьогодні",
   notifyBody: "Час відмітити день.",
+  reminderTime: "Час нагадування",
   addImage: "Додати зображення",
   changeImage: "Змінити",
   privacy: "Конфіденційність",

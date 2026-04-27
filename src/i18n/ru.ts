@@ -39,6 +39,7 @@ const ru: Translations = {
   notifications: "Уведомления",
   notifyUnlogged: "Напомнить если не записано сегодня",
   notifyBody: "Время отметить день.",
+  reminderTime: "Время напоминания",
   addImage: "Добавить изображение",
   changeImage: "Изменить",
   privacy: "Конфиденциальность",

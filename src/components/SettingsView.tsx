@@ -51,6 +51,9 @@ export default function SettingsView({ onExportJson, onExportCsv }: SettingsView
   const [notifyEnabled, setNotifyEnabled] = useState(
     () => localStorage.getItem("notifyUnlogged") === "true"
   );
+  const [reminderTime, setReminderTime] = useState(
+    () => localStorage.getItem("reminderTime") ?? "09:00"
+  );
 
   // Privacy state
   const [pinSet, setPinSet] = useState(() => hasPin());
@@ -283,6 +286,21 @@ export default function SettingsView({ onExportJson, onExportCsv }: SettingsView
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${notifyEnabled ? "translate-x-4" : "translate-x-0.5"}`} />
           </div>
         </button>
+        {notifyEnabled && (
+          <div className="stone border border-border rounded-2xl px-4 py-3 flex items-center justify-between gap-3">
+            <span className="text-sm text-muted">{t.reminderTime}</span>
+            <input
+              type="time"
+              value={reminderTime}
+              onChange={(e) => {
+                setReminderTime(e.target.value);
+                localStorage.setItem("reminderTime", e.target.value);
+              }}
+              className="bg-bg border border-border rounded-xl px-3 py-1.5 text-primary text-sm outline-none focus:border-accent transition-colors"
+              style={{ colorScheme: "dark" }}
+            />
+          </div>
+        )}
       </section>
 
       {/* Export */}
