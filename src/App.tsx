@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, Reorder } from "framer-motion";
 import type { Habit, AppData, Language, Theme } from "./types";
 import { LangContext, translations } from "./i18n";
 import { loadData, saveData } from "./storage";
@@ -27,6 +27,7 @@ export default function App() {
   const [isAddingHabit, setIsAddingHabit] = useState(false);
   const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("habits");
+  const [stoneTrigger, setStoneTrigger] = useState(0);
 
   useEffect(() => {
     loadData().then((data: AppData) => {
@@ -84,9 +85,10 @@ export default function App() {
         };
       })
     );
+    setStoneTrigger((c) => c + 1);
   }, []);
 
-  const handleRelapse = useCallback((id: string) => {
+  const handleRelapse = useCallback((id: string, note?: string) => {
     setHabits((prev) =>
       prev.map((h) => {
         if (h.id !== id) return h;
@@ -98,11 +100,12 @@ export default function App() {
           lastRelapseAt: new Date().toISOString(),
           history: [
             ...h.history,
-            { timestamp: new Date().toISOString(), type: "relapse" as const },
+            { timestamp: new Date().toISOString(), type: "relapse" as const, ...(note ? { note } : {}) },
           ],
         };
       })
     );
+    setStoneTrigger((c) => c + 1);
   }, []);
 
   const handleSetStreakDate = useCallback((id: string, date: string | null) => {
@@ -228,19 +231,27 @@ export default function App() {
                     <p className="text-subtle text-xs">{t.addFirst}</p>
                   </div>
                 ) : (
-                  <AnimatePresence>
-                    {habits.map((habit) => (
-                      <HabitCard
-                        key={habit.id}
-                        habit={habit}
-                        onCleanDay={handleCleanDay}
-                        onRelapse={handleRelapse}
-                        onDelete={handleDelete}
-                        onStats={setSelectedHabitId}
-                        onSetStreakDate={handleSetStreakDate}
-                      />
-                    ))}
-                  </AnimatePresence>
+                  <Reorder.Group
+                    axis="y"
+                    values={habits}
+                    onReorder={setHabits}
+                    as="div"
+                    className="flex flex-col gap-4"
+                  >
+                    <AnimatePresence initial={false}>
+                      {habits.map((habit) => (
+                        <HabitCard
+                          key={habit.id}
+                          habit={habit}
+                          onCleanDay={handleCleanDay}
+                          onRelapse={(id, note) => handleRelapse(id, note)}
+                          onDelete={handleDelete}
+                          onStats={setSelectedHabitId}
+                          onSetStreakDate={handleSetStreakDate}
+                        />
+                      ))}
+                    </AnimatePresence>
+                  </Reorder.Group>
                 )}
 
                 <button
@@ -262,7 +273,7 @@ export default function App() {
           </AnimatePresence>
         </div>
 
-        <Stone />
+        <Stone trigger={stoneTrigger} />
 
         <AddHabitModal
           isOpen={isAddingHabit}

@@ -3,20 +3,26 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLang } from "../i18n";
 import { phrases } from "../phrases";
 
-export default function Stone() {
+interface StoneProps {
+  trigger?: number;
+}
+
+export default function Stone({ trigger = 0 }: StoneProps) {
   const { lang } = useLang();
   const [isBlinking, setIsBlinking] = useState(false);
   const [phrase, setPhrase] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const constraintsRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
 
   const langRef = useRef(lang);
   langRef.current = lang;
   const lastIndexRef = useRef(-1);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showNowRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
-
     const scheduleBlink = () => {
       const delay = 3000 + Math.random() * 5000;
       timeoutId = setTimeout(() => {
@@ -27,14 +33,11 @@ export default function Stone() {
         }, 130);
       }, delay);
     };
-
     scheduleBlink();
     return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-
     const pickPhrase = () => {
       const list = phrases[langRef.current];
       let idx = Math.floor(Math.random() * list.length);
@@ -43,26 +46,47 @@ export default function Stone() {
       return list[idx];
     };
 
-    const schedulePhrase = () => {
+    const scheduleIdle = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
       const delay = 20000 + Math.random() * 35000;
-      timeoutId = setTimeout(() => {
+      timerRef.current = setTimeout(() => {
         const next = pickPhrase();
         setPhrase(next);
         const duration = Math.max(3000, Math.min(8000, 2500 + next.length * 50));
-        timeoutId = setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           setPhrase(null);
-          schedulePhrase();
+          scheduleIdle();
         }, duration);
       }, delay);
     };
 
-    schedulePhrase();
-    return () => clearTimeout(timeoutId);
+    const showNow = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      const next = pickPhrase();
+      setPhrase(next);
+      const duration = Math.max(3000, Math.min(8000, 2500 + next.length * 50));
+      timerRef.current = setTimeout(() => {
+        setPhrase(null);
+        scheduleIdle();
+      }, duration);
+    };
+
+    showNowRef.current = showNow;
+    scheduleIdle();
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   useEffect(() => {
     setPhrase(null);
   }, [lang]);
+
+  useEffect(() => {
+    if (trigger === 0) return;
+    showNowRef.current?.();
+  }, [trigger]);
 
   return (
     <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-50">
@@ -71,9 +95,13 @@ export default function Stone() {
         dragMomentum={false}
         dragElastic={0.08}
         dragConstraints={constraintsRef}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => setIsDragging(false)}
-        className="absolute bottom-6 right-6 pointer-events-auto select-none cursor-grab active:cursor-grabbing"
+        onDragStart={() => { isDraggingRef.current = true; setIsDragging(true); }}
+        onDragEnd={() => {
+          setTimeout(() => { isDraggingRef.current = false; }, 50);
+          setIsDragging(false);
+        }}
+        onTap={() => { if (!isDraggingRef.current) showNowRef.current?.(); }}
+        className="absolute bottom-6 right-6 pointer-events-auto select-none cursor-pointer"
         style={{ width: 90, height: 90 }}
       >
         <AnimatePresence>
