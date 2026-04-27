@@ -44,11 +44,13 @@ export default function Stone() {
     const schedulePhrase = () => {
       const delay = 20000 + Math.random() * 35000;
       timeoutId = setTimeout(() => {
-        setPhrase(pickPhrase());
+        const next = pickPhrase();
+        setPhrase(next);
+        const duration = Math.max(3000, Math.min(8000, 2500 + next.length * 50));
         timeoutId = setTimeout(() => {
           setPhrase(null);
           schedulePhrase();
-        }, 4500);
+        }, duration);
       }, delay);
     };
 
