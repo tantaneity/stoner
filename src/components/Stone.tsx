@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLang } from "../i18n";
 import { phrases } from "../phrases";
@@ -7,15 +7,10 @@ export default function Stone() {
   const { lang } = useLang();
   const [isBlinking, setIsBlinking] = useState(false);
   const [phrase, setPhrase] = useState<string | null>(null);
-  const [lastIndex, setLastIndex] = useState(-1);
 
-  const pickPhrase = useCallback(() => {
-    const list = phrases[lang];
-    let idx = Math.floor(Math.random() * list.length);
-    if (idx === lastIndex) idx = (idx + 1) % list.length;
-    setLastIndex(idx);
-    return list[idx];
-  }, [lang, lastIndex]);
+  const langRef = useRef(lang);
+  langRef.current = lang;
+  const lastIndexRef = useRef(-1);
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -38,6 +33,14 @@ export default function Stone() {
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
 
+    const pickPhrase = () => {
+      const list = phrases[langRef.current];
+      let idx = Math.floor(Math.random() * list.length);
+      if (idx === lastIndexRef.current) idx = (idx + 1) % list.length;
+      lastIndexRef.current = idx;
+      return list[idx];
+    };
+
     const schedulePhrase = () => {
       const delay = 20000 + Math.random() * 35000;
       timeoutId = setTimeout(() => {
@@ -51,7 +54,11 @@ export default function Stone() {
 
     schedulePhrase();
     return () => clearTimeout(timeoutId);
-  }, [pickPhrase]);
+  }, []);
+
+  useEffect(() => {
+    setPhrase(null);
+  }, [lang]);
 
   return (
     <div className="fixed bottom-6 right-6 pointer-events-none select-none z-50">
@@ -83,12 +90,14 @@ export default function Stone() {
         )}
       </AnimatePresence>
 
-      <img
+      <motion.img
         src={isBlinking ? "/stone_blink.png" : "/stone.png"}
         alt=""
         width={90}
         height={90}
         draggable={false}
+        animate={{ scale: [1, 1.025, 1] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
   );
