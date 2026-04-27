@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { AnimatePresence, motion, Reorder } from "framer-motion";
 import type { Habit, AppData, Language, Theme } from "./types";
 import { LangContext, translations } from "./i18n";
@@ -9,6 +9,8 @@ import AddHabitModal from "./components/AddHabitModal";
 import StatsView from "./components/StatsView";
 import SettingsView from "./components/SettingsView";
 import PrivacyNoticeModal from "./components/PrivacyNoticeModal";
+import LockScreen, { hasPin } from "./components/LockScreen";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import {
   isPermissionGranted,
   sendNotification,
@@ -34,6 +36,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("habits");
   const [stoneTrigger, setStoneTrigger] = useState(0);
   const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const lastUnlockRef = useRef<number>(0);
 
   useEffect(() => {
     loadData().then(async (data: AppData) => {
@@ -43,7 +47,14 @@ export default function App() {
       applyTheme(data.theme);
       setIsLoaded(true);
 
-      if (!localStorage.getItem("privacyNoticeSeen")) {
+      // Restore disguised window title
+      const savedTitle = localStorage.getItem("appTitle");
+      if (savedTitle) getCurrentWindow().setTitle(savedTitle);
+
+      // Lock on startup if PIN is set
+      if (hasPin()) {
+        setIsLocked(true);
+      } else if (!localStorage.getItem("privacyNoticeSeen")) {
         setShowPrivacyNotice(true);
       }
 
@@ -69,6 +80,19 @@ export default function App() {
     if (!isLoaded) return;
     saveData({ habits, language, theme });
   }, [habits, language, theme, isLoaded]);
+
+  // Auto-lock on window focus
+  useEffect(() => {
+    const handleFocus = () => {
+      if (!hasPin()) return;
+      const setting = localStorage.getItem("autoLock") ?? "off";
+      if (setting === "off") return;
+      const ms = setting === "1m" ? 60_000 : setting === "5m" ? 300_000 : 900_000;
+      if (Date.now() - lastUnlockRef.current > ms) setIsLocked(true);
+    };
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, []);
 
   const handleSetTheme = useCallback((t: Theme) => {
     setThemeState(t);
@@ -193,6 +217,22 @@ export default function App() {
 
   if (!isLoaded) {
     return <div className="h-full bg-bg" />;
+  }
+
+  if (isLocked) {
+    return (
+      <LangContext.Provider value={{ lang: language, t, setLang: handleSetLang, theme, setTheme: handleSetTheme }}>
+        <div className="min-h-full bg-bg">
+          <LockScreen
+            onUnlock={() => {
+              lastUnlockRef.current = Date.now();
+              setIsLocked(false);
+              if (!localStorage.getItem("privacyNoticeSeen")) setShowPrivacyNotice(true);
+            }}
+          />
+        </div>
+      </LangContext.Provider>
+    );
   }
 
   return (
