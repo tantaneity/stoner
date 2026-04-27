@@ -38,6 +38,10 @@ const en = {
   notifyUnlogged: "Remind if not logged today",
   addImage: "Add image",
   changeImage: "Change",
+  privacyStonePhrase: "your habits stay here.\nbetween you and me.\n(i'm a rock. i don't talk.)",
+  privacyDesc: "Everything is stored locally on your device. No servers, no tracking. You can add a PIN lock in Settings if you want extra protection.",
+  privacyLater: "Got it",
+  privacySetup: "Go to Settings",
   day: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
 };
 

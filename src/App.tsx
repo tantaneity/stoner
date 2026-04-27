@@ -8,6 +8,7 @@ import HabitCard from "./components/HabitCard";
 import AddHabitModal from "./components/AddHabitModal";
 import StatsView from "./components/StatsView";
 import SettingsView from "./components/SettingsView";
+import PrivacyNoticeModal from "./components/PrivacyNoticeModal";
 import {
   isPermissionGranted,
   sendNotification,
@@ -32,6 +33,7 @@ export default function App() {
   const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("habits");
   const [stoneTrigger, setStoneTrigger] = useState(0);
+  const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
 
   useEffect(() => {
     loadData().then(async (data: AppData) => {
@@ -40,6 +42,10 @@ export default function App() {
       setThemeState(data.theme);
       applyTheme(data.theme);
       setIsLoaded(true);
+
+      if (!localStorage.getItem("privacyNoticeSeen")) {
+        setShowPrivacyNotice(true);
+      }
 
       if (localStorage.getItem("notifyUnlogged") === "true") {
         const granted = await isPermissionGranted();
@@ -330,6 +336,20 @@ export default function App() {
           isOpen={isAddingHabit}
           onAdd={handleAddHabit}
           onClose={() => setIsAddingHabit(false)}
+        />
+
+        <PrivacyNoticeModal
+          isOpen={showPrivacyNotice}
+          onDismiss={() => {
+            localStorage.setItem("privacyNoticeSeen", "1");
+            setShowPrivacyNotice(false);
+          }}
+          onGoSettings={() => {
+            localStorage.setItem("privacyNoticeSeen", "1");
+            setShowPrivacyNotice(false);
+            setActiveTab("settings");
+            setSelectedHabitId(null);
+          }}
         />
       </div>
     </LangContext.Provider>
