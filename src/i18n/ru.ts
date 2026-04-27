@@ -38,6 +38,7 @@ const ru: Translations = {
   exportDone: "Сохранено в Загрузки",
   notifications: "Уведомления",
   notifyUnlogged: "Напомнить если не записано сегодня",
+  notifyBody: "Время отметить день.",
   addImage: "Добавить изображение",
   changeImage: "Изменить",
   privacy: "Конфиденциальность",

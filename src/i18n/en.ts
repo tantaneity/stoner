@@ -36,6 +36,7 @@ const en = {
   exportDone: "Saved to Downloads",
   notifications: "Notifications",
   notifyUnlogged: "Remind if not logged today",
+  notifyBody: "Time to check in.",
   addImage: "Add image",
   changeImage: "Change",
   privacy: "Privacy",

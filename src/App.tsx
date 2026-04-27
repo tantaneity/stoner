@@ -62,14 +62,13 @@ export default function App() {
         const granted = await isPermissionGranted();
         if (granted) {
           const todayStr = new Date().toISOString().split("T")[0];
-          const unlogged = data.habits.filter(
+          const lastNotified = localStorage.getItem("lastNotifiedDate");
+          const hasUnlogged = data.habits.some(
             (h) => !h.history.some((e) => e.timestamp.startsWith(todayStr))
           );
-          if (unlogged.length > 0) {
-            sendNotification({
-              title: "Stoner",
-              body: `${unlogged.length} habit${unlogged.length > 1 ? "s" : ""} not logged today`,
-            });
+          if (hasUnlogged && lastNotified !== todayStr) {
+            localStorage.setItem("lastNotifiedDate", todayStr);
+            sendNotification({ title: "Stoner", body: translations[data.language].notifyBody });
           }
         }
       }

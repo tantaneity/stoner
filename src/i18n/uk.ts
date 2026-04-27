@@ -38,6 +38,7 @@ const uk: Translations = {
   exportDone: "Збережено в Завантаження",
   notifications: "Сповіщення",
   notifyUnlogged: "Нагадати якщо не записано сьогодні",
+  notifyBody: "Час відмітити день.",
   addImage: "Додати зображення",
   changeImage: "Змінити",
   privacy: "Конфіденційність",
