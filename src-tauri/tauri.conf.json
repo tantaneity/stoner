@@ -15,9 +15,7 @@
         "title": "Stoner",
         "width": 520,
         "height": 720,
-        "minWidth": 420,
-        "minHeight": 500,
-        "resizable": true,
+        "resizable": false,
         "fullscreen": false,
         "decorations": true,
         "center": true
