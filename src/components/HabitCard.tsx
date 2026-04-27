@@ -54,8 +54,6 @@ export default function HabitCard({
     ? streakFromDate(habit.streakStartDate!)
     : habit.currentStreak;
 
-  const minDate = habit.createdAt.split("T")[0];
-
   return (
     <>
       <motion.div
@@ -183,7 +181,6 @@ export default function HabitCard({
       <SetStreakDateModal
         isOpen={showDateModal}
         currentDate={habit.streakStartDate}
-        minDate={minDate}
         onSet={(date) => {
           onSetStreakDate(habit.id, date);
           setShowDateModal(false);

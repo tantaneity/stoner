@@ -5,7 +5,6 @@ import { useLang } from "../i18n";
 interface SetStreakDateModalProps {
   isOpen: boolean;
   currentDate: string | null;
-  minDate: string;
   onSet: (date: string) => void;
   onClose: () => void;
 }
@@ -13,7 +12,6 @@ interface SetStreakDateModalProps {
 export default function SetStreakDateModal({
   isOpen,
   currentDate,
-  minDate,
   onSet,
   onClose,
 }: SetStreakDateModalProps) {
@@ -54,7 +52,7 @@ export default function SetStreakDateModal({
               <input
                 type="date"
                 value={selected}
-                min={minDate}
+                min="2000-01-01"
                 max={today}
                 onChange={(e) => setSelected(e.target.value)}
                 className="bg-bg border border-border rounded-xl px-4 py-3 text-primary text-sm outline-none focus:border-accent transition-colors w-full"
