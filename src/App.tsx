@@ -38,6 +38,7 @@ export default function App() {
   const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const lastUnlockRef = useRef<number>(0);
+  const t = translations[language];
 
   useEffect(() => {
     loadData().then(async (data: AppData) => {
@@ -234,7 +235,6 @@ export default function App() {
   }, [habits]);
 
   const selectedHabit = habits.find((h) => h.id === selectedHabitId) ?? null;
-  const t = translations[language];
 
   if (!isLoaded) {
     return <div className="h-full bg-bg" />;
