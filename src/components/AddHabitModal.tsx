@@ -49,7 +49,7 @@ export default function AddHabitModal({ isOpen, onAdd, onClose }: AddHabitModalP
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm"
+            className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50"
           >
             <form
               onSubmit={handleSubmit}

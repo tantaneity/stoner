@@ -13,9 +13,9 @@
     "windows": [
       {
         "title": "Stoner",
-        "width": 460,
-        "height": 700,
-        "minWidth": 380,
+        "width": 520,
+        "height": 720,
+        "minWidth": 420,
         "minHeight": 500,
         "resizable": true,
         "fullscreen": false,

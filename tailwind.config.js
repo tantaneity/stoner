@@ -18,7 +18,7 @@ export default {
         subtle: "var(--c-subtle)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Segoe UI", "system-ui", "sans-serif"],
       },
     },
   },
