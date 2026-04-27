@@ -10,6 +10,7 @@ export interface HistoryEntry {
 export interface Habit {
   id: string;
   name: string;
+  image?: string;
   createdAt: string;
   currentStreak: number;
   bestStreak: number;

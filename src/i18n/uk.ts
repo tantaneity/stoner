@@ -32,6 +32,14 @@ const uk: Translations = {
   skip: "Пропустити",
   activity: "Активність",
   relapseNotes: "Нотатки",
+  exportData: "Експорт даних",
+  exportJson: "Експорт JSON",
+  exportCsv: "Експорт CSV",
+  exportDone: "Збережено в Завантаження",
+  notifications: "Сповіщення",
+  notifyUnlogged: "Нагадати якщо не записано сьогодні",
+  addImage: "Додати зображення",
+  changeImage: "Змінити",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;

@@ -30,6 +30,14 @@ const en = {
   skip: "Skip",
   activity: "Activity",
   relapseNotes: "Notes",
+  exportData: "Export data",
+  exportJson: "Export JSON",
+  exportCsv: "Export CSV",
+  exportDone: "Saved to Downloads",
+  notifications: "Notifications",
+  notifyUnlogged: "Remind if not logged today",
+  addImage: "Add image",
+  changeImage: "Change",
   day: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
 };
 

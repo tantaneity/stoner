@@ -8,6 +8,10 @@ import HabitCard from "./components/HabitCard";
 import AddHabitModal from "./components/AddHabitModal";
 import StatsView from "./components/StatsView";
 import SettingsView from "./components/SettingsView";
+import {
+  isPermissionGranted,
+  sendNotification,
+} from "@tauri-apps/plugin-notification";
 
 type Tab = "habits" | "settings";
 
@@ -30,12 +34,28 @@ export default function App() {
   const [stoneTrigger, setStoneTrigger] = useState(0);
 
   useEffect(() => {
-    loadData().then((data: AppData) => {
+    loadData().then(async (data: AppData) => {
       setHabits(data.habits);
       setLanguage(data.language);
       setThemeState(data.theme);
       applyTheme(data.theme);
       setIsLoaded(true);
+
+      if (localStorage.getItem("notifyUnlogged") === "true") {
+        const granted = await isPermissionGranted();
+        if (granted) {
+          const todayStr = new Date().toISOString().split("T")[0];
+          const unlogged = data.habits.filter(
+            (h) => !h.history.some((e) => e.timestamp.startsWith(todayStr))
+          );
+          if (unlogged.length > 0) {
+            sendNotification({
+              title: "Stoner",
+              body: `${unlogged.length} habit${unlogged.length > 1 ? "s" : ""} not logged today`,
+            });
+          }
+        }
+      }
     });
   }, []);
 
@@ -136,6 +156,32 @@ export default function App() {
     [selectedHabitId]
   );
 
+  const handleSetImage = useCallback((id: string, image: string | undefined) => {
+    setHabits((prev) => prev.map((h) => (h.id === id ? { ...h, image } : h)));
+  }, []);
+
+  const buildExportJson = useCallback(() => {
+    return JSON.stringify({ habits }, null, 2);
+  }, [habits]);
+
+  const buildExportCsv = useCallback(() => {
+    const rows = ["habit,date,type,note,streak"];
+    for (const h of habits) {
+      let streak = 0;
+      for (const e of [...h.history].sort(
+        (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      )) {
+        if (e.type === "relapse") streak = 0; else streak++;
+        rows.push(
+          [h.name, e.timestamp.split("T")[0], e.type, e.note ?? "", streak]
+            .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+            .join(",")
+        );
+      }
+    }
+    return rows.join("\n");
+  }, [habits]);
+
   const selectedHabit = habits.find((h) => h.id === selectedHabitId) ?? null;
   const t = translations[language];
 
@@ -215,7 +261,11 @@ export default function App() {
                 onBack={() => setSelectedHabitId(null)}
               />
             ) : activeTab === "settings" ? (
-              <SettingsView key="settings" />
+              <SettingsView
+                key="settings"
+                onExportJson={buildExportJson}
+                onExportCsv={buildExportCsv}
+              />
             ) : (
               <motion.div
                 key="home"
@@ -248,6 +298,7 @@ export default function App() {
                           onDelete={handleDelete}
                           onStats={setSelectedHabitId}
                           onSetStreakDate={handleSetStreakDate}
+                        onSetImage={handleSetImage}
                         />
                       ))}
                     </AnimatePresence>

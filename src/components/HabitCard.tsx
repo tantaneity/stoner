@@ -4,6 +4,8 @@ import type { Habit } from "../types";
 import { useLang } from "../i18n";
 import SetStreakDateModal from "./SetStreakDateModal";
 import RelapseNoteModal from "./RelapseNoteModal";
+import { open } from "@tauri-apps/plugin-dialog";
+import { convertFileSrc } from "@tauri-apps/api/core";
 
 interface HabitCardProps {
   habit: Habit;
@@ -12,6 +14,7 @@ interface HabitCardProps {
   onDelete: (id: string) => void;
   onStats: (id: string) => void;
   onSetStreakDate: (id: string, date: string | null) => void;
+  onSetImage: (id: string, image: string | undefined) => void;
 }
 
 function streakFromDate(dateStr: string): number {
@@ -37,11 +40,22 @@ export default function HabitCard({
   onDelete,
   onStats,
   onSetStreakDate,
+  onSetImage,
 }: HabitCardProps) {
   const { t } = useLang();
   const controls = useDragControls();
   const [showDateModal, setShowDateModal] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
+
+  const handlePickImage = async () => {
+    const path = await open({
+      multiple: false,
+      filters: [{ name: "Image", extensions: ["png", "jpg", "jpeg", "webp", "gif"] }],
+    });
+    if (typeof path === "string") {
+      onSetImage(habit.id, convertFileSrc(path));
+    }
+  };
 
   const todayStr = new Date().toISOString().split("T")[0];
 
@@ -85,6 +99,26 @@ export default function HabitCard({
               <circle cx="8" cy="12" r="1.5" />
             </svg>
           </motion.div>
+
+          {habit.image ? (
+            <button
+              onClick={handlePickImage}
+              className="shrink-0 rounded-xl overflow-hidden border border-border hover:border-subtle transition-colors"
+              title={t.changeImage}
+            >
+              <img src={habit.image} alt="" className="w-9 h-9 object-cover" />
+            </button>
+          ) : (
+            <button
+              onClick={handlePickImage}
+              className="shrink-0 w-9 h-9 rounded-xl border border-dashed border-border text-muted/40 hover:text-muted/80 hover:border-subtle transition-colors flex items-center justify-center"
+              title={t.addImage}
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          )}
 
           <h2 className="text-primary font-medium text-sm leading-snug flex-1">
             {habit.name}

@@ -5,6 +5,13 @@
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "store:default"
+    "store:default",
+    "notification:default",
+    "dialog:default",
+    "fs:default",
+    "fs:allow-write-text-file",
+    "fs:allow-download-dir",
+    "fs:scope-download-recursive",
+    "fs:scope-app-data-recursive"
   ]
 }

@@ -32,6 +32,14 @@ const ru: Translations = {
   skip: "Пропустить",
   activity: "Активность",
   relapseNotes: "Заметки",
+  exportData: "Экспорт данных",
+  exportJson: "Экспорт JSON",
+  exportCsv: "Экспорт CSV",
+  exportDone: "Сохранено в Загрузки",
+  notifications: "Уведомления",
+  notifyUnlogged: "Напомнить если не записано сегодня",
+  addImage: "Добавить изображение",
+  changeImage: "Изменить",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
