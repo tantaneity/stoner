@@ -5,17 +5,6 @@
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "store:allow-load",
-    "store:allow-set",
-    "store:allow-get",
-    "store:allow-save",
-    "store:allow-delete",
-    "store:allow-clear",
-    "store:allow-has",
-    "store:allow-keys",
-    "store:allow-values",
-    "store:allow-entries",
-    "store:allow-length",
-    "store:allow-close"
+    "store:default"
   ]
 }
