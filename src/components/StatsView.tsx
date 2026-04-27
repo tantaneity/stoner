@@ -80,19 +80,40 @@ function CustomDot({ cx, cy, payload }: CustomDotProps) {
   );
 }
 
-function HeatmapCalendar({ history }: { history: HistoryEntry[] }) {
+function HeatmapCalendar({
+  history,
+  streakStartDate,
+}: {
+  history: HistoryEntry[];
+  streakStartDate: string | null;
+}) {
   const WEEKS = 26;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const dateMap = useMemo(() => {
     const map = new Map<string, "clean" | "relapse">();
+
+    // If streakStartDate is set, fill all days from it to today as clean first
+    if (streakStartDate) {
+      const start = new Date(streakStartDate);
+      start.setHours(0, 0, 0, 0);
+      const cur = new Date(start);
+      while (cur <= today) {
+        map.set(cur.toISOString().split("T")[0], "clean");
+        cur.setDate(cur.getDate() + 1);
+      }
+    }
+
+    // Overlay actual history entries (relapses override synthetic cleans)
     for (const entry of history) {
       const d = entry.timestamp.split("T")[0];
-      if (!map.has(d) || entry.type === "relapse") map.set(d, entry.type);
+      if (entry.type === "relapse" || !map.has(d)) map.set(d, entry.type);
     }
+
     return map;
-  }, [history]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history, streakStartDate]);
 
   const weeks = useMemo(() => {
     const start = new Date(today);
@@ -213,7 +234,7 @@ export default function StatsView({ habit, onBack }: StatsViewProps) {
         <h2 className="text-xs font-semibold text-muted uppercase tracking-widest">
           {t.activity}
         </h2>
-        <HeatmapCalendar history={habit.history} />
+        <HeatmapCalendar history={habit.history} streakStartDate={habit.streakStartDate} />
       </div>
 
       <div className="stone border border-border rounded-2xl p-5">

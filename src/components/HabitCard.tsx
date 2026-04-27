@@ -5,7 +5,7 @@ import { useLang } from "../i18n";
 import SetStreakDateModal from "./SetStreakDateModal";
 import RelapseNoteModal from "./RelapseNoteModal";
 import { open } from "@tauri-apps/plugin-dialog";
-import { convertFileSrc } from "@tauri-apps/api/core";
+import { readFile } from "@tauri-apps/plugin-fs";
 
 interface HabitCardProps {
   habit: Habit;
@@ -53,7 +53,14 @@ export default function HabitCard({
       filters: [{ name: "Image", extensions: ["png", "jpg", "jpeg", "webp", "gif"] }],
     });
     if (typeof path === "string") {
-      onSetImage(habit.id, convertFileSrc(path));
+      const bytes = await readFile(path);
+      const blob = new Blob([bytes]);
+      const dataUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      });
+      onSetImage(habit.id, dataUrl);
     }
   };
 
