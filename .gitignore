@@ -6,3 +6,7 @@ dist/
 # Tauri
 src-tauri/target/
 src-tauri/gen/
+
+# Signing keys
+*.key
+*.key.pub

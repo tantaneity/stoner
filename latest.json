@@ -1,0 +1,11 @@
+{
+  "version": "0.2.1",
+  "notes": "",
+  "pub_date": "2026-04-28T00:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "url": "https://github.com/tantaneity/stoner/releases/download/v0.2.1/Stoner_0.2.1_x64-setup.nsis.zip",
+      "signature": ""
+    }
+  }
+}

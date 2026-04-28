@@ -64,6 +64,12 @@ const uk: Translations = {
   privacyDesc: "Все зберігається локально на твоєму пристрої. Жодних серверів, жодного відстеження. У налаштуваннях можна встановити PIN для додаткового захисту.",
   privacyLater: "Зрозуміло",
   privacySetup: "Налаштувати",
+  updates: "Оновлення",
+  checkForUpdates: "Перевірити оновлення",
+  updateChecking: "Перевірка...",
+  updateDownloading: "Завантаження",
+  updateUpToDate: "У вас остання версія",
+  updateError: "Не вдалося перевірити оновлення",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;

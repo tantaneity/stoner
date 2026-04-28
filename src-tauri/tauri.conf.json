@@ -25,6 +25,14 @@
       "csp": null
     }
   },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDYyQTYzRDE2QjhCMUUwMDEKUldRQjRMRzRGajJtWW9ZOVd1YVpSOVlCTENUNmxSNERCbTZrVUdpaU56VDNwL1JQMU54SG1TUDkK",
+      "endpoints": [
+        "https://raw.githubusercontent.com/tantaneity/stoner/main/latest.json"
+      ]
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",

@@ -10,6 +10,8 @@ import {
   sendNotification,
 } from "@tauri-apps/plugin-notification";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { check } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
 import { hasPin, clearPin } from "./LockScreen";
 import PinSetupModal from "./PinSetupModal";
 
@@ -48,6 +50,8 @@ interface SettingsViewProps {
 export default function SettingsView({ onExportJson, onExportCsv }: SettingsViewProps) {
   const { t, lang, setLang, theme, setTheme } = useLang();
   const [exportMsg, setExportMsg] = useState<string | null>(null);
+  const [updateStatus, setUpdateStatus] = useState<"idle" | "checking" | "downloading" | "up-to-date" | "error">("idle");
+  const [updateProgress, setUpdateProgress] = useState(0);
   const [notifyEnabled, setNotifyEnabled] = useState(
     () => localStorage.getItem("notifyUnlogged") === "true"
   );
@@ -113,6 +117,32 @@ export default function SettingsView({ onExportJson, onExportCsv }: SettingsView
   const handleAutoLockChange = (val: string) => {
     setAutoLock(val);
     localStorage.setItem("autoLock", val);
+  };
+
+  const handleCheckUpdate = async () => {
+    setUpdateStatus("checking");
+    try {
+      const update = await check();
+      if (!update?.available) {
+        setUpdateStatus("up-to-date");
+        setTimeout(() => setUpdateStatus("idle"), 3000);
+        return;
+      }
+      setUpdateStatus("downloading");
+      let downloaded = 0;
+      let total = 0;
+      await update.downloadAndInstall((event) => {
+        if (event.event === "Started") total = event.data.contentLength ?? 0;
+        if (event.event === "Progress") {
+          downloaded += event.data.chunkLength;
+          setUpdateProgress(total > 0 ? Math.round((downloaded / total) * 100) : 0);
+        }
+      });
+      await relaunch();
+    } catch {
+      setUpdateStatus("error");
+      setTimeout(() => setUpdateStatus("idle"), 3000);
+    }
   };
 
   const handleApplyTitle = async () => {
@@ -321,6 +351,29 @@ export default function SettingsView({ onExportJson, onExportCsv }: SettingsView
           </button>
         </div>
         {exportMsg && <p className="text-xs text-accent text-center">{exportMsg}</p>}
+      </section>
+
+      {/* Updates */}
+      <section className="flex flex-col gap-3">
+        <h2 className="text-xs font-semibold text-muted uppercase tracking-widest">{t.updates}</h2>
+        <button
+          onClick={handleCheckUpdate}
+          disabled={updateStatus === "checking" || updateStatus === "downloading"}
+          className="flex items-center justify-between px-4 py-3 rounded-2xl border border-border stone hover:border-subtle transition-all disabled:opacity-50"
+        >
+          <span className="text-sm text-primary">
+            {updateStatus === "checking" && t.updateChecking}
+            {updateStatus === "downloading" && `${t.updateDownloading} ${updateProgress}%`}
+            {updateStatus === "up-to-date" && t.updateUpToDate}
+            {updateStatus === "error" && t.updateError}
+            {updateStatus === "idle" && t.checkForUpdates}
+          </span>
+          {updateStatus === "idle" && (
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-muted shrink-0">
+              <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
+        </button>
       </section>
 
       <PinSetupModal

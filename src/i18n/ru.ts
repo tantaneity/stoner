@@ -64,6 +64,12 @@ const ru: Translations = {
   privacyDesc: "Всё хранится локально на твоём устройстве. Никаких серверов, никакой слежки. В настройках можно установить PIN для дополнительной защиты.",
   privacyLater: "Понятно",
   privacySetup: "Настроить",
+  updates: "Обновления",
+  checkForUpdates: "Проверить обновления",
+  updateChecking: "Проверка...",
+  updateDownloading: "Загрузка",
+  updateUpToDate: "У вас последняя версия",
+  updateError: "Не удалось проверить обновления",
   day: (n: number) => {
     const mod10 = n % 10;
     const mod100 = n % 100;

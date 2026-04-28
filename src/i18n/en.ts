@@ -62,6 +62,12 @@ const en = {
   privacyDesc: "Everything is stored locally on your device. No servers, no tracking. You can add a PIN lock in Settings if you want extra protection.",
   privacyLater: "Got it",
   privacySetup: "Go to Settings",
+  updates: "Updates",
+  checkForUpdates: "Check for updates",
+  updateChecking: "Checking...",
+  updateDownloading: "Downloading",
+  updateUpToDate: "You're up to date",
+  updateError: "Failed to check for updates",
   day: (n: number) => `${n} ${n === 1 ? "day" : "days"}`,
 };
 
