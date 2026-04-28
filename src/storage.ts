@@ -4,7 +4,7 @@ import type { AppData } from "./types";
 const STORE_FILE = "stoner.json";
 
 async function getStore() {
-  return load(STORE_FILE, { autoSave: true });
+  return load(STORE_FILE, { autoSave: true, defaults: {} });
 }
 
 export async function loadData(): Promise<AppData> {
