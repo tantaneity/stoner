@@ -4,8 +4,8 @@
   "pub_date": "2026-04-28T00:00:00Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/tantaneity/stoner/releases/download/v0.2.1/Stoner_0.2.1_x64-setup.nsis.zip",
-      "signature": ""
+      "url": "https://github.com/tantaneity/stoner/releases/download/v0.2.1/Stoner_0.2.1_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRQjRMRzRGajJtWWhyYSt2cVYvTHVxOUhXK2lhWXBLQXVTejl2Wi9LRnAvT1JaV3NpdUtUamdmY3BTbHBOaWQ2VGhCUTVFYUw1U3JiSmc0NmVqVEQycUp2V3g4M0NVakFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc3MzY0NjczCWZpbGU6U3RvbmVyXzAuMi4xX3g2NC1zZXR1cC5leGUKZ0p5NFhVRzFwejBFbEZjZXFoSlFSMEZHUnpVV016Zml5bTRLb2w2VE9CVXZYcDhVaWhkMXdYV0VxSjlTM09yVmhNOW9KTHlXNk5kTTJkb0RLWnZ6REE9PQo="
     }
   }
 }
